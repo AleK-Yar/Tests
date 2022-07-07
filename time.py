@@ -6,13 +6,18 @@
            результатом из ответа ресурса о текущем времени с учетом часового пояса
         d) замеры из пункта c) повторить серией из пяти запросв и вывести среднюю дельту на основе данной серии '''
 
-
+import sys
 import requests
 from datetime import datetime, timezone, time, timedelta
 
-res = requests.get("http://worldtimeapi.org/api/timezone/Europe/Moscow")
+url = "http://worldtimeapi.org/api/timezone/Europe/Moscow"
+res = requests.get(url)
 date_times = []
 number_of_requests = 5
+
+if not res:
+    print('Ошибка при обращении к серверу, повторите позже!')
+    sys.exit()
 
 
 def delta_time(request):  # дельта времени локального и ответа от сервера
