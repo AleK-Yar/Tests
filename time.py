@@ -14,7 +14,7 @@ from datetime import datetime, timezone, time, timedelta
 url = "http://worldtimeapi.org/api/timezone/Europe/Moscow"
 res = requests.get(url)
 date_times = []
-number_of_requests = 5
+number_of_requests = 10
 
 
 if not res:  # Если сервер не отвечает, проверяем 5 раз через 5 секунд
@@ -37,9 +37,9 @@ def delta_time(request):  # дельта времени локального и 
     return delta
 
 
-def avg_time(number_of_requests):  # вычисление среднего значения дельты
+def avg_time(num_of_requests):  # вычисление среднего значения дельты
 
-    for _ in range(number_of_requests):
+    for _ in range(num_of_requests):
         date_times.append(delta_time(res))
 
     total = 0
