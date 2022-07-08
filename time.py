@@ -32,15 +32,15 @@ def delta_time(request):  # дельта времени локального и 
 
     date_time_local = datetime.now(timezone.utc)  # + timedelta(hours=15, minutes=53, seconds=57)  # >>> для тестов
     date_time_serv = datetime.strptime(request.json()["utc_datetime"], '%Y-%m-%dT%H:%M:%S.%f%z')
-    delta = abs(date_time_serv - date_time_local)
+    delta = abs(date_time_local - date_time_serv)
 
     return delta
 
 
-def avg_time(delta_time):  # вычисление среднего значения дельты
+def avg_time(number_of_requests):  # вычисление среднего значения дельты
 
     for _ in range(number_of_requests):
-        date_times.append(delta_time)
+        date_times.append(delta_time(res))
 
     total = 0
     for dt in date_times:
@@ -55,7 +55,7 @@ def avg_time(delta_time):  # вычисление среднего значен�
 
 
 dl = delta_time(res)
-avgTime = avg_time(delta_time(res))
+avgTime = avg_time(number_of_requests)
 
 print()
 print(f'Ответ в сыром виде: {res.text} \n')
