@@ -14,7 +14,7 @@ from datetime import datetime, timezone, time, timedelta
 url = "http://worldtimeapi.org/api/timezone/Europe/Moscow"
 res = requests.get(url)
 date_times = []
-number_of_requests = 10
+number_of_requests = 5
 
 
 if not res:  # Если сервер не отвечает, проверяем 5 раз через 5 секунд
