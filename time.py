@@ -1,13 +1,14 @@
-'''        Есть ресурс «http://worldtimeapi.org/api/timezone/Europe/Moscow», что сделать:
+"""      Есть ресурс «http://worldtimeapi.org/api/timezone/Europe/Moscow», что сделать:
         a) написать скрипт, который выполняет запрос к данному ресурсу, получает ответ,
            результат ответа выводит на экран в сыром виде.
         b) вывести название временной зоны
         c) выводит дельту времени между точкой перед началом выполенения запроса и
            результатом из ответа ресурса о текущем времени с учетом часового пояса
-        d) замеры из пункта c) повторить серией из пяти запросв и вывести среднюю дельту на основе данной серии '''
+        d) замеры из пункта c) повторить серией из пяти запросв и вывести среднюю дельту на основе данной серии """
 
-import sys
 import requests
+from sys import exit
+from time import sleep
 from datetime import datetime, timezone, time, timedelta
 
 url = "http://worldtimeapi.org/api/timezone/Europe/Moscow"
@@ -15,16 +16,23 @@ res = requests.get(url)
 date_times = []
 number_of_requests = 5
 
-if not res:
-    print('Ошибка при обращении к серверу, повторите позже!')
-    sys.exit()
+
+if not res:  # Если сервер не отвечает, проверяем 5 раз через 5 секунд
+    for _ in range(5):
+        sleep(5)
+        res = requests.get(url)
+        if res:
+            break
+    else:
+        print('Ошибка при обращении к серверу, повторите позже!')
+        exit()
 
 
 def delta_time(request):  # дельта времени локального и ответа от сервера
 
-    date_time_local = datetime.now(timezone.utc)  # + timedelta(hours=0, minutes=0, seconds=0)  # >>> для тестов
+    date_time_local = datetime.now(timezone.utc)  # + timedelta(hours=15, minutes=53, seconds=57)  # >>> для тестов
     date_time_serv = datetime.strptime(request.json()["utc_datetime"], '%Y-%m-%dT%H:%M:%S.%f%z')
-    delta = date_time_local - date_time_serv
+    delta = abs(date_time_serv - date_time_local)
 
     return delta
 
@@ -50,10 +58,7 @@ dl = delta_time(res)
 avgTime = avg_time(date_times)
 
 print()
-print(f'Ответ в сыром виде: {res.text}')
-print()
-print(f'Timezone: {res.json()["timezone"]}')
-print()
-print(f'Дельта времени локального и ответа сервера: {dl}')
-print()
+print(f'Ответ в сыром виде: {res.text} \n')
+print(f'Timezone: {res.json()["timezone"]} \n')
+print(f'Дельта времени локального и ответа сервера: {dl} \n')
 print(f'Средняя дельта времени за {number_of_requests} запросов:{avgTime}')
