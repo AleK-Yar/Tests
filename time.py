@@ -37,10 +37,10 @@ def delta_time(request):  # дельта времени локального и 
     return delta
 
 
-def avg_time(date_times):  # вычисление среднего значения дельты
+def avg_time(delta_time):  # вычисление среднего значения дельты
 
     for _ in range(number_of_requests):
-        date_times.append(delta_time(res))
+        date_times.append(delta_time)
 
     total = 0
     for dt in date_times:
@@ -55,7 +55,7 @@ def avg_time(date_times):  # вычисление среднего значен�
 
 
 dl = delta_time(res)
-avgTime = avg_time(date_times)
+avgTime = avg_time(delta_time(res))
 
 print()
 print(f'Ответ в сыром виде: {res.text} \n')
