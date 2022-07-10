@@ -17,11 +17,11 @@ len_dirs = 0
 lst_extension = []
 dict_extension = {}
 
-if not dir_path.endswith("\\") and not dir_path.endswith("/"):
-    if os.name == 'posix':
-        dir_path = dir_path + "/"
-    if os.name == 'nt':
-        dir_path = dir_path + "\\"
+
+if os.name == 'posix' and not dir_path.endswith("/"):
+    dir_path = dir_path + "/"
+if os.name == 'nt' and not dir_path.endswith("\\"):
+    dir_path = dir_path + "\\"
 
 if os.path.exists(dir_path):
 
