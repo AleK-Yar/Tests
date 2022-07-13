@@ -30,7 +30,7 @@ def delta_time():  # дельта времени локального и отв�
             sys.exit()
 
     date_time_serv = datetime.strptime(res.json()["utc_datetime"], '%Y-%m-%dT%H:%M:%S.%f%z')
-    delta = abs(date_time_serv - date_time_local)
+    delta = date_time_serv - date_time_local
 
     return delta, res
 
