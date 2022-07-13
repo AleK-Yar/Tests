@@ -53,14 +53,14 @@ def avg_time(num_of_requests):  # вычисление среднего знач
     return time(hours, minutes, seconds, microseconds)
 
 
-def prints(number_of_requests):
+number_of_requests = 5
 
-    print()
-    print(f'Ответ в сыром виде: {delta_time()[1].text} \n')
-    print(f'Timezone: {delta_time()[1].json()["timezone"]} \n')
-    print(f'Дельта времени локального и ответа сервера: {delta_time()[0]} \n')
-    print(f'Средняя дельта времени за {number_of_requests} запросов:{avg_time(number_of_requests)}')
+print()
+print(f'Ответ в сыром виде: {delta_time()[1].text} \n')
+print(f'Timezone: {delta_time()[1].json()["timezone"]} \n')
+print(f'Дельта времени локального и ответа сервера: {delta_time()[0]} \n')
+print(f'Средняя дельта времени за {number_of_requests} запросов:{avg_time(number_of_requests)}')
 
 
-prints(5)
+
 
