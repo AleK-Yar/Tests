@@ -7,40 +7,39 @@
         d) замеры из пункта c) повторить серией из пяти запросв и вывести среднюю дельту на основе данной серии """
 
 import requests
-from sys import exit
-from time import sleep
-from datetime import datetime, timezone, time, timedelta
+import sys
+import time
+from datetime import datetime, timezone, time
 
 url = "http://worldtimeapi.org/api/timezone/Europe/Moscow"
-res = requests.get(url)
-date_times = []
-number_of_requests = 5
 
 
-if not res:  # Если сервер не отвечает, проверяем 5 раз через 5 секунд
-    for _ in range(5):
-        sleep(5)
-        res = requests.get(url)
-        if res:
-            break
-    else:
-        print('Ошибка при обращении к серверу, повторите позже!')
-        exit()
+def delta_time():  # дельта времени локального и ответа от сервера
 
+    date_time_local = datetime.now(timezone.utc)
+    res = requests.get(url)
 
-def delta_time(request):  # дельта времени локального и ответа от сервера
+    if not res:  # Если сервер не отвечает, проверяем 5 раз через 5 секунд
+        for _ in range(5):
+            time.sleep(5)
+            res = requests.get(url)
+            if res:
+                break
+        else:
+            print('Ошибка при обращении к серверу, повторите позже!')
+            sys.exit()
 
-    date_time_local = datetime.now(timezone.utc)  # + timedelta(hours=15, minutes=53, seconds=57)  # >>> для тестов
-    date_time_serv = datetime.strptime(request.json()["utc_datetime"], '%Y-%m-%dT%H:%M:%S.%f%z')
-    delta = abs(date_time_local - date_time_serv)
+    date_time_serv = datetime.strptime(res.json()["utc_datetime"], '%Y-%m-%dT%H:%M:%S.%f%z')
+    delta = abs(date_time_serv - date_time_local)
 
-    return delta
+    return delta, res
 
 
 def avg_time(num_of_requests):  # вычисление среднего значения дельты
 
+    date_times = []
     for _ in range(num_of_requests):
-        date_times.append(delta_time(res))
+        date_times.append(delta_time()[0])
 
     total = 0
     for dt in date_times:
@@ -54,11 +53,14 @@ def avg_time(num_of_requests):  # вычисление среднего знач
     return time(hours, minutes, seconds, microseconds)
 
 
-dl = delta_time(res)
-avgTime = avg_time(number_of_requests)
+def prints(number_of_requests):
 
-print()
-print(f'Ответ в сыром виде: {res.text} \n')
-print(f'Timezone: {res.json()["timezone"]} \n')
-print(f'Дельта времени локального и ответа сервера: {dl} \n')
-print(f'Средняя дельта времени за {number_of_requests} запросов:{avgTime}')
+    print()
+    print(f'Ответ в сыром виде: {delta_time()[1].text} \n')
+    print(f'Timezone: {delta_time()[1].json()["timezone"]} \n')
+    print(f'Дельта времени локального и ответа сервера: {delta_time()[0]} \n')
+    print(f'Средняя дельта времени за {number_of_requests} запросов:{avg_time(number_of_requests)}')
+
+
+prints(5)
+

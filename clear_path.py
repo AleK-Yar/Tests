@@ -47,7 +47,6 @@ if os.path.exists(dir_path):
                 print(f"Папка {os.path.join(root, folder)}, не удалена, проверьте разрешения и повторите!")
                 continue
 
-
     dict_extension = dict(zip(lst_extension, [lst_extension.count(i) for i in lst_extension]))  # Создание словаря
     if dir_count > 0:
         dict_extension['folder'] = dir_count
