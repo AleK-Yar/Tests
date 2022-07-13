@@ -11,11 +11,10 @@ import sys
 import time
 from datetime import datetime, timezone, time
 
-url = "http://worldtimeapi.org/api/timezone/Europe/Moscow"
-
 
 def delta_time():  # дельта времени локального и ответа от сервера
 
+    url = "http://worldtimeapi.org/api/timezone/Europe/Moscow"
     date_time_local = datetime.now(timezone.utc)
     res = requests.get(url)
 
@@ -35,10 +34,10 @@ def delta_time():  # дельта времени локального и отв�
     return delta, res
 
 
-def avg_time(num_of_requests):  # вычисление среднего значения дельты
+def avg_time(num_of_res):  # вычисление среднего значения дельты
 
     date_times = []
-    for _ in range(num_of_requests):
+    for _ in range(num_of_res):
         date_times.append(delta_time()[0])
 
     total = 0
@@ -46,19 +45,20 @@ def avg_time(num_of_requests):  # вычисление среднего знач
         total += dt.seconds + dt.microseconds / 1E6
 
     avg = total / len(date_times)
+    microseconds = int(round(avg - int(avg), 6) * 1E6)
     minutes, seconds = divmod(int(avg), 60)
     hours, minutes = divmod(minutes, 60)
-    microseconds = int(round(avg - int(avg), 6) * 1E6)
 
     return time(hours, minutes, seconds, microseconds)
 
 
 number_of_requests = 5
+dl = delta_time()
 
 print()
-print(f'Ответ в сыром виде: {delta_time()[1].text} \n')
-print(f'Timezone: {delta_time()[1].json()["timezone"]} \n')
-print(f'Дельта времени локального и ответа сервера: {delta_time()[0]} \n')
+print(f'Ответ в сыром виде: {dl[1].text} \n')
+print(f'Timezone: {dl[1].json()["timezone"]} \n')
+print(f'Дельта времени локального и ответа сервера: {dl[0]} \n')
 print(f'Средняя дельта времени за {number_of_requests} запросов:{avg_time(number_of_requests)}')
 
 
