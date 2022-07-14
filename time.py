@@ -53,14 +53,10 @@ def avg_time(num_of_res):  # вычисление среднего значен�
 
 
 number_of_requests = 5
-dl = delta_time()
+dl, rs = delta_time()
 
 print()
-print(f'Ответ в сыром виде: {dl[1].text} \n')
-print(f'Timezone: {dl[1].json()["timezone"]} \n')
-print(f'Дельта времени локального и ответа сервера: {dl[0]} \n')
+print(f'Ответ в сыром виде: {rs.text} \n')
+print(f'Timezone: {rs.json()["timezone"]} \n')
+print(f'Дельта времени локального и ответа сервера: {dl} \n')
 print(f'Средняя дельта времени за {number_of_requests} запросов:{avg_time(number_of_requests)}')
-
-
-
-
